@@ -11,3 +11,22 @@ h1 {
     padding-bottom: 0.5rem;
     border-bottom: 2px solid #4d96ff;
 }
+
+h2 {
+    color: #4d96ff;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #4d96ff;
+}
+
+.skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.skill {
+    background-color: #4d96ff;
+    color: white;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
