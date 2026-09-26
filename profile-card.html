@@ -2,26 +2,116 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Profile Card</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Abish Saji's developer profile and GitHub projects.">
+    <title>Abish Saji | Developer Profile</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Abish Saji</h1>
-    <p>Software Engineer | Web Developer | Tech Enthusiast</p>
-    <h2>Favourite Things</h2>
-    <ul>
-        <li>Programming</li>
-        <li>Traveling</li>
-        <li>Photography</li>
-        <li>Reading</li>
-    </ul>
-    <h2>Skills</h2>
-    <div class="skills">
-        <div class="skill">HTML</div>
-        <div class="skill">CSS</div>
-        <div class="skill">JavaScript</div>
-        <div class="skill">React</div>
-        <div class="skill">Node.js</div>
-    </div>
+    <div class="background-grid" aria-hidden="true"></div>
+    <div class="glow glow-one" aria-hidden="true"></div>
+    <div class="glow glow-two" aria-hidden="true"></div>
+
+    <header class="site-header">
+        <a class="brand" href="#top" aria-label="Abish Saji home">
+            <span class="brand-mark">&lt;/&gt;</span>
+            <span>abish<span class="accent">.dev</span></span>
+        </a>
+        <nav class="nav-links" aria-label="Main navigation">
+            <a href="#about">About</a>
+            <a href="#projects">Projects</a>
+            <a href="#skills">Skills</a>
+        </nav>
+        <button class="icon-button" id="theme-toggle" type="button" aria-label="Switch to light theme">
+            <i class="bi bi-sun-fill" aria-hidden="true"></i>
+        </button>
+    </header>
+
+    <main id="top">
+        <section class="hero section-wrap" id="about">
+            <div class="hero-copy reveal">
+                <div class="eyebrow"><span class="status-dot"></span> Available for creative projects</div>
+                <h1>Building digital<br><span class="gradient-text">experiences</span> that matter.</h1>
+                <p class="hero-description">Hi, I’m <strong>Abish Saji</strong> — a software engineer and web developer who loves turning curious ideas into useful, beautiful products.</p>
+                <div class="hero-actions">
+                    <a class="button button-primary" href="#projects">Explore my work <i class="bi bi-arrow-up-right" aria-hidden="true"></i></a>
+                    <a class="button button-ghost" href="https://github.com/AbishSajiNMIMS" target="_blank" rel="noreferrer"><i class="bi bi-github" aria-hidden="true"></i> GitHub profile</a>
+                </div>
+                <div class="social-row">
+                    <a href="https://github.com/AbishSajiNMIMS" target="_blank" rel="noreferrer" aria-label="Abish Saji NMIMS GitHub"><i class="bi bi-github"></i></a>
+                    <a href="https://github.com/Abish1212" target="_blank" rel="noreferrer" aria-label="Abish1212 GitHub"><i class="bi bi-code-slash"></i></a>
+                    <span class="social-line"></span>
+                    <span class="social-caption">Mumbai · India</span>
+                </div>
+            </div>
+
+            <div class="profile-orbit reveal reveal-delay">
+                <div class="orbit-ring orbit-ring-one"></div>
+                <div class="orbit-ring orbit-ring-two"></div>
+                <div class="profile-card">
+                    <div class="profile-card-top">
+                        <span class="mini-label">DEVELOPER CARD</span>
+                        <span class="pulse-icon"><span></span></span>
+                    </div>
+                    <div class="avatar-frame">
+                        <img id="hero-avatar" src="https://avatars.githubusercontent.com/u/193383655?v=4" alt="Abish Saji profile avatar">
+                    </div>
+                    <h2>Abish Saji</h2>
+                    <p class="profile-handle">@AbishSajiNMIMS</p>
+                    <div class="profile-tags"><span>Software Engineer</span><span>Web Developer</span></div>
+                    <div class="profile-card-footer"><span><i class="bi bi-geo-alt"></i> India</span><span><i class="bi bi-stars"></i> Open to learn</span></div>
+                </div>
+                <div class="floating-chip chip-code"><i class="bi bi-braces"></i> clean code</div>
+                <div class="floating-chip chip-heart"><i class="bi bi-heart-fill"></i> made with care</div>
+            </div>
+        </section>
+
+        <section class="stats section-wrap reveal" aria-label="GitHub statistics">
+            <div class="stat"><strong id="repo-count">—</strong><span>Public repositories</span></div>
+            <div class="stat"><strong id="star-count">—</strong><span>Community stars</span></div>
+            <div class="stat"><strong id="language-count">—</strong><span>Languages explored</span></div>
+            <div class="stat"><strong id="follower-count">—</strong><span>GitHub followers</span></div>
+        </section>
+
+        <section class="projects-section section-wrap" id="projects">
+            <div class="section-heading reveal">
+                <div><span class="section-kicker">01 / SELECTED WORK</span><h2>Things I’ve built.</h2></div>
+                <p>Every project is a little experiment in learning, creating, and making the web more delightful.</p>
+            </div>
+            <div class="project-toolbar reveal">
+                <label class="search-box"><i class="bi bi-search" aria-hidden="true"></i><input id="repo-search" type="search" placeholder="Search repositories..." aria-label="Search repositories"></label>
+                <div class="filter-group" id="owner-filters" role="group" aria-label="Filter repositories by profile">
+                    <button class="filter-button active" data-owner="all" type="button">All repos</button>
+                    <button class="filter-button" data-owner="AbishSajiNMIMS" type="button">NMIMS</button>
+                    <button class="filter-button" data-owner="Abish1212" type="button">Abish1212</button>
+                </div>
+            </div>
+            <div class="repo-grid" id="repo-grid">
+                <div class="loading-state"><span class="loader"></span><p>Fetching projects from GitHub...</p></div>
+            </div>
+            <p class="empty-state" id="empty-state" hidden>No repositories match that search. Try another keyword.</p>
+        </section>
+
+        <section class="skills-section section-wrap" id="skills">
+            <div class="section-heading reveal"><div><span class="section-kicker">02 / TOOLKIT</span><h2>Curious by nature.</h2></div><p>A growing toolkit shaped by projects, experiments, and a lot of “what if?” moments.</p></div>
+            <div class="skills-grid reveal">
+                <div class="skill-tile"><i class="bi bi-window"></i><span>Frontend</span><small>HTML · CSS · JavaScript · React</small></div>
+                <div class="skill-tile"><i class="bi bi-server"></i><span>Backend</span><small>Node.js · Django · REST APIs</small></div>
+                <div class="skill-tile"><i class="bi bi-database"></i><span>Data & tools</span><small>Git · GitHub · SQL · Bootstrap</small></div>
+                <div class="skill-tile"><i class="bi bi-lightning-charge"></i><span>Mindset</span><small>Learn · Build · Iterate · Share</small></div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer section-wrap">
+        <span>© <span id="year"></span> Abish Saji</span>
+        <span>Designed & coded with <i class="bi bi-heart-fill"></i> and curiosity</span>
+        <a href="#top">Back to top <i class="bi bi-arrow-up"></i></a>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
