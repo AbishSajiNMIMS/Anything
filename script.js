@@ -1,4 +1,5 @@
 const profiles = ["AbishSajiNMIMS", "Abish1212"];
+const fallbackRepoDataUrl = "./fallback-repos.json";
 const state = { repositories: [], owner: "all", query: "" };
 const repoGrid = document.querySelector("#repo-grid");
 const emptyState = document.querySelector("#empty-state");
@@ -31,22 +32,40 @@ function renderRepositories() {
 
 async function loadGithubData() {
     try {
-        const responses = await Promise.all(profiles.map(async (profile) => {
+        const responses = await Promise.allSettled(profiles.map(async (profile) => {
             const [userResponse, repoResponse] = await Promise.all([
                 fetch(`https://api.github.com/users/${profile}`, { cache: "no-store" }),
                 fetch(`https://api.github.com/users/${profile}/repos?type=public&per_page=100&sort=updated`, { cache: "no-store" })
             ]);
-            if (!userResponse.ok || !repoResponse.ok) throw new Error("GitHub data could not be loaded.");
+            if (!userResponse.ok || !repoResponse.ok) throw new Error(`GitHub data could not be loaded for ${profile}.`);
             return { user: await userResponse.json(), repos: await repoResponse.json() };
         }));
-        state.repositories = responses.flatMap(({ repos }) => repos).sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+
+        const successful = responses.filter((response) => response.status === "fulfilled").map((response) => response.value);
+
+        if (successful.length > 0) {
+            state.repositories = successful.flatMap(({ repos }) => repos).sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
+            const stars = state.repositories.reduce((total, repo) => total + repo.stargazers_count, 0);
+            const languages = new Set(state.repositories.map((repo) => repo.language).filter(Boolean));
+            document.querySelector("#repo-count").textContent = formatNumber(state.repositories.length);
+            document.querySelector("#star-count").textContent = formatNumber(stars);
+            document.querySelector("#language-count").textContent = formatNumber(languages.size);
+            document.querySelector("#follower-count").textContent = formatNumber(Math.max(...successful.map(({ user }) => user.followers)));
+            document.querySelector("#hero-avatar").src = successful[0].user.avatar_url;
+            renderRepositories();
+            return;
+        }
+
+        const fallbackResponse = await fetch(fallbackRepoDataUrl, { cache: "no-store" });
+        if (!fallbackResponse.ok) throw new Error("Fallback repository data could not be loaded.");
+        const fallbackRepositories = await fallbackResponse.json();
+        state.repositories = fallbackRepositories.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at));
         const stars = state.repositories.reduce((total, repo) => total + repo.stargazers_count, 0);
         const languages = new Set(state.repositories.map((repo) => repo.language).filter(Boolean));
         document.querySelector("#repo-count").textContent = formatNumber(state.repositories.length);
         document.querySelector("#star-count").textContent = formatNumber(stars);
         document.querySelector("#language-count").textContent = formatNumber(languages.size);
-        document.querySelector("#follower-count").textContent = formatNumber(Math.max(...responses.map(({ user }) => user.followers)));
-        document.querySelector("#hero-avatar").src = responses[0].user.avatar_url;
+        document.querySelector("#follower-count").textContent = "—";
         renderRepositories();
     } catch (error) {
         repoGrid.innerHTML = `<div class="loading-state"><i class="bi bi-wifi-off" style="font-size:25px;color:var(--pink)"></i><p>GitHub is taking a moment. <a class="accent" href="https://github.com/AbishSajiNMIMS" target="_blank" rel="noreferrer">View projects directly →</a></p></div>`;
