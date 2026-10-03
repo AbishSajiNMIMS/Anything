@@ -33,8 +33,8 @@ async function loadGithubData() {
     try {
         const responses = await Promise.all(profiles.map(async (profile) => {
             const [userResponse, repoResponse] = await Promise.all([
-                fetch(`https://api.github.com/users/${profile}`),
-                fetch(`https://api.github.com/users/${profile}/repos?type=public&per_page=100&sort=updated`)
+                fetch(`https://api.github.com/users/${profile}`, { cache: "no-store" }),
+                fetch(`https://api.github.com/users/${profile}/repos?type=public&per_page=100&sort=updated`, { cache: "no-store" })
             ]);
             if (!userResponse.ok || !repoResponse.ok) throw new Error("GitHub data could not be loaded.");
             return { user: await userResponse.json(), repos: await repoResponse.json() };
