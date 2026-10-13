@@ -1,4 +1,4 @@
-const { createElement: h, useEffect, useMemo, useState } = React;
+const { createElement: h, useEffect, useState } = React;
 const hiddenRepositories = new Set(["anything", "taskflow", "lab-7", "abish-html-testing", "abish_html_testing", "practice1", "practice", "time-your-messages", "linkedln-automation-project", "app.py", "campuspro-ai_bot", "student-app", "nfa", "nfa-news-for-all-", "news-for-all-nfa", "app_naive_bayes_test", "diabetes-1-2.csv", "diabetes-1-2-.csv", "assignment11", "assignment-11_2", "assignmentnaivebayesclassifier", "assignmentnaivebasedclassifier", "assignmentnaivebasedclassifier123", "assignmentnaivebasedclassifier12", "assignmentnaivebasedclassifier1"]);
 const profiles = ["AbishSajiNMIMS", "Abish1212"];
 const languageColors = { JavaScript: "#f7df1e", HTML: "#e34f26", CSS: "#563d7c", Python: "#3776ab", Java: "#f89820", TypeScript: "#3178c6" };
@@ -11,10 +11,21 @@ const credentials = [
     { type: "Certificate", icon: "gem", title: "Polarizer 2025", subtitle: "Basic Science & Humanities Department · NMIMS MPSTME", image: "assets/certificates/polarizer-2025.jpg" },
     { type: "Certificate", icon: "cpu", title: "ADAPPT 3.0", subtitle: "IETE-SF MPSTME · Certificate of appreciation · Sep 2024", image: "assets/certificates/adappt-3-0.jpg" }
 ];
+const hobbies = [
+    ["bicycle", "Cycling"],
+    ["dumbbell", "Gym"],
+    ["film", "Watching movies"],
+    ["dribbble", "Football"],
+    ["controller", "Gaming"],
+    ["youtube", "YouTube content creation"]
+];
 
 function formatNumber(value) { return new Intl.NumberFormat("en", { notation: value > 999 ? "compact" : "standard", maximumFractionDigits: 1 }).format(value); }
 function routeName() { return window.location.hash.replace("#", "") || "about"; }
 function Icon({ name }) { return h("i", { className: `bi bi-${name}`, "aria-hidden": "true" }); }
+function HobbyGraphic({ icon }) {
+    return icon === "dumbbell" ? h("span", { className: "hobby-dumbbell", "aria-hidden": "true" }, h("span"), h("span"), h("span")) : h(Icon, { name: icon });
+}
 
 function ProfileFace({ profile, back = false }) {
     return h("span", { className: `flip-card-face${back ? " flip-card-back" : ""}` },
@@ -38,10 +49,9 @@ function FlipProfile() {
     );
 }
 
-function Header({ route, theme, setTheme }) {
+function Header({ route }) {
     return h("header", { className: "site-header" }, h("a", { className: "brand", href: "#about" }, h("span", { className: "brand-mark" }, "</>"), h("span", null, "abish", h("span", { className: "accent" }, ".dev"))),
-        h("nav", { className: "nav-links", "aria-label": "Main navigation" }, ["about", "projects", "skills", "certificates"].map(name => h("a", { key: name, className: route === name ? "active" : "", href: `#${name}` }, name[0].toUpperCase() + name.slice(1)))),
-        h("button", { className: "icon-button", onClick: () => setTheme(theme === "light" ? "dark" : "light"), "aria-label": "Toggle color theme" }, h(Icon, { name: theme === "light" ? "moon-stars-fill" : "sun-fill" })));
+        h("nav", { className: "nav-links", "aria-label": "Main navigation" }, ["about", "projects", "skills", "certificates"].map(name => h("a", { key: name, className: route === name ? "active" : "", href: `#${name}` }, name[0].toUpperCase() + name.slice(1)))));
 }
 
 function AboutPage() {
@@ -53,10 +63,11 @@ function AboutPage() {
             h("a", { className: "hero-scroll-button", href: "#projects", "aria-label": "Explore projects" }, h(Icon, { name: "chevron-down" })),
             h("div", { className: "contact-row" }, h("a", { href: "mailto:abish.saji45@nmims.in" }, h(Icon, { name: "mortarboard" }), " abish.saji45@nmims.in"), h("a", { href: "mailto:abishsaji0809@gmail.com" }, h(Icon, { name: "envelope" }), " abishsaji0809@gmail.com"))),
         h("div", { className: "profile-orbit reveal visible" },
-            h("figure", { className: "sih-side-card" }, h("img", { src: "assets/hero/sih-26-27.jpg", alt: "Abish Saji in formal attire for SIH 26-27" }), h("figcaption", null, h("span", null, "SIH"), h("strong", null, "26-27")))),
+            h("figure", { className: "sih-side-card" }, h("img", { src: "assets/hero/profile-photo.png", alt: "Portrait of Abish Saji" }), h("figcaption", null, h("span", null, "ABISH"), h("strong", null, "SAJI")))),
         h("aside", { className: "hero-info-rail reveal visible" },
             h("div", { className: "hero-info-block" }, h("h2", null, "About me"), h("p", null, "Software engineer and web developer from Mumbai, focused on building simple, thoughtful products."), h("a", { href: "#skills" }, "Learn more ", h(Icon, { name: "arrow-right" }))),
             h("div", { className: "hero-info-block" }, h("h2", null, "My work"), h("p", null, "Projects across web apps, dashboards, automation, AI workflows, and hands-on experiments."), h("a", { href: "#projects" }, "Browse portfolio ", h(Icon, { name: "arrow-right" }))),
+            h("div", { className: "hero-info-block hobbies-block" }, h("h2", null, "Hobbies"), h("div", { className: "hobbies-list" }, hobbies.map(([icon, label]) => h("div", { className: "hobby-item", key: label }, h("span", null, label), h("span", { className: "hobby-graphic" }, h(HobbyGraphic, { icon })))))),
             h("div", { className: "hero-info-block" }, h("h2", null, "Follow me"), h("div", { className: "social-row" }, h("a", { href: "https://github.com/AbishSajiNMIMS", target: "_blank", rel: "noreferrer", "aria-label": "GitHub" }, h(Icon, { name: "github" })), h("a", { href: "https://github.com/Abish1212", target: "_blank", rel: "noreferrer", "aria-label": "Alternate GitHub" }, h(Icon, { name: "code-slash" })), h("a", { href: "https://www.linkedin.com/in/abish-saji-30b790319", target: "_blank", rel: "noreferrer", "aria-label": "LinkedIn" }, h(Icon, { name: "linkedin" }))))));
 }
 
@@ -119,19 +130,26 @@ function CertificateModal({ item, close }) {
 }
 
 function App() {
-    const [route, setRoute] = useState(routeName()); const [theme, setTheme] = useState("light"); const [repositories, setRepositories] = useState([]); const [stats, setStats] = useState({ repos: "—", stars: "—", languages: "—", followers: "—" }); const [progress, setProgress] = useState(0);
+    const [route, setRoute] = useState(routeName()); const [repositories, setRepositories] = useState([]); const [stats, setStats] = useState({ repos: "—", stars: "—", languages: "—", followers: "—" }); const [progress, setProgress] = useState(0);
     useEffect(() => { const onHash = () => setRoute(routeName()); window.addEventListener("hashchange", onHash); return () => window.removeEventListener("hashchange", onHash); }, []);
-    useEffect(() => { document.body.classList.toggle("light-theme", theme === "light"); }, [theme]);
     useEffect(() => { document.body.classList.toggle("about-route", route === "about"); }, [route]);
-    useEffect(() => { const onScroll = () => setProgress(window.scrollY / Math.max(document.documentElement.scrollHeight - window.innerHeight, 1) * 100); window.addEventListener("scroll", onScroll, { passive: true }); onScroll(); return () => window.removeEventListener("scroll", onScroll); }, [route]);
+    useEffect(() => {
+        const onScroll = () => setProgress(Math.min(100, Math.max(0, window.scrollY / Math.max(document.documentElement.scrollHeight - window.innerHeight, 1) * 100)));
+        const observer = new ResizeObserver(onScroll);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+        observer.observe(document.documentElement);
+        onScroll();
+        return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); observer.disconnect(); };
+    }, [route]);
     useEffect(() => { Promise.allSettled(profiles.map(async profile => { const [user, repos] = await Promise.all([fetch(`https://api.github.com/users/${profile}`), fetch(`https://api.github.com/users/${profile}/repos?type=public&per_page=100&sort=updated`)]); if (!user.ok || !repos.ok) throw new Error("GitHub request failed"); return { user: await user.json(), repos: await repos.json() }; })).then(async results => { let data = results.filter(result => result.status === "fulfilled").flatMap(result => result.value.repos).filter(repo => !hiddenRepositories.has(repo.name.toLowerCase())); if (!data.length) data = await fetch("./fallback-repos.json").then(response => response.json()).then(items => items.filter(repo => !hiddenRepositories.has(repo.name.toLowerCase()))); data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)); setRepositories(data); setStats({ repos: formatNumber(data.length), stars: formatNumber(data.reduce((sum, repo) => sum + repo.stargazers_count, 0)), languages: formatNumber(new Set(data.map(repo => repo.language).filter(Boolean)).size), followers: "—" }); }).catch(error => console.error(error)); }, []);
     const Page = route === "projects" ? h(ProjectsPage, { repositories }) : route === "skills" ? h(SkillsPage) : route === "certificates" ? h(CertificatesPage) : h(AboutPage);
     const statItems = [["repos", "Public repositories"], ["stars", "Community stars"], ["languages", "Languages explored"], ["followers", "GitHub followers"]];
     return h(React.Fragment, null,
-        h("div", { className: "background-grid" }), h("div", { className: "glow glow-one" }), h("div", { className: "glow glow-two" }),
-        h("div", { className: "scroll-progress", style: { width: `${progress}%` }, "aria-hidden": "true" }),
-        h(Header, { route, theme, setTheme }),
-        h("main", { id: "top" }, Page, route === "about" && h("section", { className: "stats section-wrap" }, statItems.map(([key, label]) => h("div", { className: "stat", key }, h("strong", null, stats[key]), h("span", null, label))))),
-        h("footer", { className: "site-footer section-wrap" }, h("span", null, "© ", new Date().getFullYear(), " Abish Saji"), h("span", null, "Designed & coded with ", h(Icon, { name: "heart-fill" }), " and curiosity"), h("a", { href: "#about" }, "About ", h(Icon, { name: "arrow-up" }))));
+        h("div", { className: "scroll-progress", role: "progressbar", "aria-label": "Page scroll progress", "aria-valuemin": "0", "aria-valuemax": "100", "aria-valuenow": Math.round(progress) },
+            h("span", { className: "scroll-progress-fill", style: { width: `${progress}%` } }, h("span", { className: "scroll-progress-label" }, `${Math.round(progress)}%`))),
+        h(Header, { route }),
+        h("main", { id: "top" }, Page, route === "about" && h("section", { className: "stats section-wrap" }, statItems.map(([key, label]) => h("div", { className: "stat", key }, h("strong", null, stats[key]), h("span", null, label)))))
+    );
 }
 ReactDOM.createRoot(document.getElementById("root")).render(h(App));
