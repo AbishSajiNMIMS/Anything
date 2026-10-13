@@ -3,6 +3,14 @@ const hiddenRepositories = new Set(["anything", "taskflow", "lab-7", "abish-html
 const profiles = ["AbishSajiNMIMS", "Abish1212"];
 const languageColors = { JavaScript: "#f7df1e", HTML: "#e34f26", CSS: "#563d7c", Python: "#3776ab", Java: "#f89820", TypeScript: "#3178c6" };
 const previews = { connect4: ["https://connect4-friendadversalai.streamlit.app/", "Connect4"], safebank: ["https://abishsajinmims.github.io/SafeBank/", "SafeBank"], "equity-intelligence-dashboard-2": ["https://equity-intelligence-dashboard-2-takthjuvpv7gfysstzxdub.streamlit.app/", "Equity Intelligence Dashboard"] };
+const credentials = [
+    { type: "Internship Letter", icon: "briefcase", title: "Summer Internship Completion", subtitle: "DASCAIN AI Solutions · LinkedIn Content Manager · May-Jul 2026", image: "assets/certificates/dascain-internship-completion.jpg" },
+    { type: "Certificate", icon: "award", title: "RAG Systems & Agentic Workflows", subtitle: "Board Infinity and Coursera · Completed Sep 2026", image: "assets/certificates/rag-agentic-workflows-coursera.jpg" },
+    { type: "Certificate", icon: "people", title: "Enactus India National Exposition 2025", subtitle: "Certificate of participation for impact-focused action", image: "assets/certificates/enactus-national-exposition-2025.jpg" },
+    { type: "Certificate", icon: "lightbulb", title: "Smart India Hackathon Ideathon 2025", subtitle: "Team Bots with Dots · MPSTME Ideathon participation", image: "assets/certificates/smart-india-hackathon-ideathon-2025.jpg" },
+    { type: "Certificate", icon: "gem", title: "Polarizer 2025", subtitle: "Basic Science & Humanities Department · NMIMS MPSTME", image: "assets/certificates/polarizer-2025.jpg" },
+    { type: "Certificate", icon: "cpu", title: "ADAPPT 3.0", subtitle: "IETE-SF MPSTME · Certificate of appreciation · Sep 2024", image: "assets/certificates/adappt-3-0.jpg" }
+];
 
 function formatNumber(value) { return new Intl.NumberFormat("en", { notation: value > 999 ? "compact" : "standard", maximumFractionDigits: 1 }).format(value); }
 function routeName() { return window.location.hash.replace("#", "") || "about"; }
@@ -32,7 +40,7 @@ function FlipProfile() {
 
 function Header({ route, theme, setTheme }) {
     return h("header", { className: "site-header" }, h("a", { className: "brand", href: "#about" }, h("span", { className: "brand-mark" }, "</>"), h("span", null, "abish", h("span", { className: "accent" }, ".dev"))),
-        h("nav", { className: "nav-links", "aria-label": "Main navigation" }, ["about", "projects", "skills"].map(name => h("a", { key: name, className: route === name ? "active" : "", href: `#${name}` }, name[0].toUpperCase() + name.slice(1)))),
+        h("nav", { className: "nav-links", "aria-label": "Main navigation" }, ["about", "projects", "skills", "certificates"].map(name => h("a", { key: name, className: route === name ? "active" : "", href: `#${name}` }, name[0].toUpperCase() + name.slice(1)))),
         h("button", { className: "icon-button", onClick: () => setTheme(theme === "light" ? "dark" : "light"), "aria-label": "Toggle color theme" }, h(Icon, { name: theme === "light" ? "moon-stars-fill" : "sun-fill" })));
 }
 
@@ -77,13 +85,35 @@ function SkillsPage() {
         h("div", { className: "skills-grid reveal visible" }, skills.map(([icon, title, detail]) => h("div", { className: "skill-tile", key: title }, h(Icon, { name: icon }), h("span", null, title), h("small", null, detail)))));
 }
 
+function CertificatesPage() {
+    const [selected, setSelected] = useState(null);
+    return h("section", { className: "page section-wrap certificates-page" },
+        h("div", { className: "section-heading reveal visible" }, h("div", null, h("span", { className: "section-kicker" }, "03 / CERTIFICATES & INTERNSHIPS"), h("h2", null, "Proof of practice.")), h("p", null, "A focused collection of certificates, participation work, and one internship completion letter.")),
+        h("div", { className: "credential-grid reveal visible" }, credentials.map((item, index) => h("article", { className: `credential-card${item.type === "Internship Letter" ? " internship-card" : ""}`, key: item.title, style: { animationDelay: `${Math.min(index * 45, 300)}ms` } },
+            h("button", { className: "credential-image-button", onClick: () => setSelected(item), "aria-label": `View ${item.title}` }, h("img", { src: item.image, alt: `${item.title} document`, loading: "lazy" })),
+            h("div", { className: "credential-content" },
+                h("span", { className: "credential-type" }, h(Icon, { name: item.icon }), item.type),
+                h("h3", null, item.title),
+                h("p", null, item.subtitle),
+                h("button", { className: "preview-expand-button", onClick: () => setSelected(item) }, h(Icon, { name: "arrows-fullscreen" }), " View"))))),
+        h(CertificateModal, { item: selected, close: () => setSelected(null) }));
+}
+
+function CertificateModal({ item, close }) {
+    if (!item) return null;
+    return h("div", { className: "preview-modal certificate-modal", role: "dialog", "aria-modal": "true", onClick: event => event.target.className.includes("preview-modal") && close() },
+        h("div", { className: "preview-modal-panel certificate-modal-panel" },
+            h("div", { className: "preview-modal-header" }, h("div", null, h("span", { className: "section-kicker" }, item.type.toUpperCase()), h("h2", null, item.title)), h("button", { className: "icon-button", onClick: close, "aria-label": "Close certificate preview" }, h(Icon, { name: "x-lg" }))),
+            h("div", { className: "certificate-modal-image" }, h("img", { src: item.image, alt: `${item.title} full document` }))));
+}
+
 function App() {
     const [route, setRoute] = useState(routeName()); const [theme, setTheme] = useState("light"); const [repositories, setRepositories] = useState([]); const [stats, setStats] = useState({ repos: "—", stars: "—", languages: "—", followers: "—" }); const [progress, setProgress] = useState(0);
     useEffect(() => { const onHash = () => setRoute(routeName()); window.addEventListener("hashchange", onHash); return () => window.removeEventListener("hashchange", onHash); }, []);
     useEffect(() => { document.body.classList.toggle("light-theme", theme === "light"); }, [theme]);
     useEffect(() => { const onScroll = () => setProgress(window.scrollY / Math.max(document.documentElement.scrollHeight - window.innerHeight, 1) * 100); window.addEventListener("scroll", onScroll, { passive: true }); onScroll(); return () => window.removeEventListener("scroll", onScroll); }, [route]);
     useEffect(() => { Promise.allSettled(profiles.map(async profile => { const [user, repos] = await Promise.all([fetch(`https://api.github.com/users/${profile}`), fetch(`https://api.github.com/users/${profile}/repos?type=public&per_page=100&sort=updated`)]); if (!user.ok || !repos.ok) throw new Error("GitHub request failed"); return { user: await user.json(), repos: await repos.json() }; })).then(async results => { let data = results.filter(result => result.status === "fulfilled").flatMap(result => result.value.repos).filter(repo => !hiddenRepositories.has(repo.name.toLowerCase())); if (!data.length) data = await fetch("./fallback-repos.json").then(response => response.json()).then(items => items.filter(repo => !hiddenRepositories.has(repo.name.toLowerCase()))); data.sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at)); setRepositories(data); setStats({ repos: formatNumber(data.length), stars: formatNumber(data.reduce((sum, repo) => sum + repo.stargazers_count, 0)), languages: formatNumber(new Set(data.map(repo => repo.language).filter(Boolean)).size), followers: "—" }); }).catch(error => console.error(error)); }, []);
-    const Page = route === "projects" ? h(ProjectsPage, { repositories }) : route === "skills" ? h(SkillsPage) : h(AboutPage);
+    const Page = route === "projects" ? h(ProjectsPage, { repositories }) : route === "skills" ? h(SkillsPage) : route === "certificates" ? h(CertificatesPage) : h(AboutPage);
     const statItems = [["repos", "Public repositories"], ["stars", "Community stars"], ["languages", "Languages explored"], ["followers", "GitHub followers"]];
     return h(React.Fragment, null,
         h("div", { className: "background-grid" }), h("div", { className: "glow glow-one" }), h("div", { className: "glow glow-two" }),
